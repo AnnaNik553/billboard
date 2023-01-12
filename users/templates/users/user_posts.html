@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <a href="{% url 'posts:index' %}">Главная</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'users:user_posts' %}">Мои объявления</a>
+            <a href="">Выход</a>
+        {% else %}
+        <a href="">Войти</a>
+        {% endif %}
+    </div>
+    {% if posts %}
+        <h3>Мои объявления</h3>
+        {% for post in posts %}
+            <div>
+                <hr>
+                    <a href="{% url 'posts:post' post.id %}">
+                        <div>
+                            <p>{{ post.title }}</p>
+                            <span>{{ post.created_at }}</span>
+                            <p>{{ post.preview }}</p>
+                            <img src="{% if post.image %} {{ post.image.url }} {% else %} {% endif %}" alt="Фото объявления" width="300" height="300">
+                        </div>
+                    </a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>У вас еще нет объявлений ((</p>
+        <a href="{% url 'posts:add_post' %}">Добавить объявление</a>
+    {% endif %}
+
+</body>
+</html>

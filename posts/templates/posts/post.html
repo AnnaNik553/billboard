@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div>
+        <a href="{% url 'posts:index' %}">Главная</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'users:user_posts' %}">Мои объявления {{ user.username }}</a>
+            <a href="">Выход</a>
+        {% else %}
+        <a href="">Войти</a>
+        {% endif %}
+    </div>
+
+    <div>
+        <br>
+        <span>автор {{ post.author }} / </span>
+        <span>дата {{ post.created_at }}</span>
+        <p>{{ post.title }} / категория {{ post.category }}</p>
+        <p>{{ post.text }}</p>
+        <img src="{% if post.image %} {{ post.image.url }} {% else %} {% endif %}" alt="Фото объявления" width="300" height="300">
+    </div>
+    {% if post.author.id == user.id %}
+        <a href="{% url 'posts:update_post' post.id %}">Редактировать</a>
+        <a href="{% url 'posts:delete_post' post.id %}">Удалить</a>
+    {% endif %}
+    <div>
+        <h3>Оставить отклик</h3>
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+        <form action="{% url 'posts:add_reply' post.id %}" method="POST">
+            {% csrf_token %}
+            <label for="replay">Ваш отклик</label>
+            <textarea name="text" id="replay" rows="5"></textarea>
+            <input type="hidden" name="author" value="{{ user.id }}">
+            <input type="hidden" name="post" value="{{ post.id }}">
+            <input type="submit" value="Сохранить">
+        </form>
+    </div>
+    <div>
+        <h4>Отклики</h4>
+        {% for reply in post.reply_set.all %}
+
+            <hr>
+            <p>{{ reply.text }}</p>
+            <p>{{ reply.author }}</p>
+            <p>{{ reply.created_at }}</p>
+            {% if reply.post.author.id == user.id %}
+                {% if not reply.accept %}
+                    <a href="{% url 'posts:accept_reply' reply.id %}">Принять</a>
+                    <a href="{% url 'posts:delete_reply' reply.id %}">Удалить</a>
+                {% endif %}
+            {% endif %}
+
+        {% endfor %}
+    </div>
+</body>
+</html>
