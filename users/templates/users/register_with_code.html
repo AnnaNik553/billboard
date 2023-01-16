@@ -1,0 +1,25 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="login_form">
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST">
+            {% csrf_token %}
+
+            <label for="code">Введите код</label>
+            <div>
+                <input class="input_register_code" type="text" name="code" id="code" required>
+            </div>
+            <input class="register-code-btn" type="submit" value="Войти">
+        </form>
+
+    </div>
+</div>
+{% endblock %}

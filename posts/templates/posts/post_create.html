@@ -1,0 +1,51 @@
+{% extends 'posts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <h3 class="post_title">{{ post_title }}</h3>
+        <div class="post_form_box">
+
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+
+            <form class="post_add_form" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <label for="category">Категория</label>
+                <div>
+                    {{ form.category }}
+                </div>
+
+                <label for="title">Заголовок</label>
+                <div>
+                    <input class="input_post" type="text" placeholder="my post" name="title" id="title" required value="{{ post.title }}">
+                </div>
+
+                <label for="text">Текст</label>
+                <div class="textarea_box">
+                    <textarea class="textarea_post" name="text" id="text" placeholder="текст объявления" required>{{ post.text }}</textarea>
+                </div>
+
+                <label for="id_image">Изображение</label>
+
+                {% if post.image %}
+                <p class="text_margin">На данный момент <a href="{{ post.image.url }}">{{ post.image }}</a></p>
+                <div>
+                    <input class="input_post" type="checkbox" name="image-clear" id="image-clear_id">
+                    <label for="image-clear_id">Удалить изображение</label>
+                </div>
+                {% else %}
+                <p class="text_margin">На данный момент изображение отсутсвует</p> {% endif %}
+                Изменить
+                <input class="input_post" class="post_img_file" type="file" name="image" accept="image/*" id="id_image">
+
+
+                <input class="post_submit_btn" type="submit" value="{{ btn_name }}">
+
+            </form>
+        </div>
+    </div>
+{% endblock %}

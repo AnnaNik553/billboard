@@ -1,0 +1,55 @@
+{% extends 'posts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+
+        <div>
+            <span class="post_desc">{{ post.author }} / {{ post.created_at }} / {{ post.category }}</span>
+            <div class="post_img_box">
+                <img class="post_img" src="{% if post.image %} {{ post.image.url }} {% else %} {% static 'img/noImg.jpg' %} {% endif %}" alt="Фото объявления">
+            </div>
+            <h2 class="post_title">{{ post.title }}</h2>
+            <p class="post_text">{{ post.text }}</p>
+        </div>
+        {% if post.author.id == user.id %}
+            <div class="do-btn-box">
+                <a class="do-btn" href="{% url 'posts:update_post' post.id %}">Редактировать</a>
+                <a class="do-btn" href="{% url 'posts:delete_post' post.id %}">Удалить</a>
+            </div>
+        {% endif %}
+        <div>
+            <h3 class="reply_title">Оставить отклик</h3>
+            {% if messages %}
+                {% for message in messages %}
+                    <p>{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+            <form action="{% url 'posts:add_reply' post.id %}" method="POST">
+                {% csrf_token %}
+                <textarea class="reply_text" name="text" id="replay" placeholder="ваш отклик"></textarea>
+                <input type="hidden" name="author" value="{{ user.id }}">
+                <input type="hidden" name="post" value="{{ post.id }}">
+                <input class="submit-btn" type="submit" value="Сохранить">
+            </form>
+        </div>
+        <div>
+            <h4 class="reply_title">Отклики</h4>
+
+            {% for reply in post.reply_set.all %}
+                <div class="reply_card">
+                    <p>{{ reply.text }}</p>
+                    <p class="reply_author">{{ reply.author }} / {{ reply.created_at }}</p>
+                    {% if reply.post.author.id == user.id %}
+                        {% if not reply.accept %}
+                            <div class="reply-btn-box">
+                                <a class="do-btn" href="{% url 'posts:accept_reply' reply.id %}">Принять</a>
+                                <a class="do-btn" href="{% url 'posts:delete_reply' reply.id %}">Удалить</a>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

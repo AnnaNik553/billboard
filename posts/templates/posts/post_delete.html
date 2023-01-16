@@ -1,0 +1,20 @@
+{% extends 'posts/base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container">
+        <div class="delete_box">
+            <h2>Вы действительно хотите удалить объявление?</h2>
+            <div class="delete_post_desc">
+                <p> Дата создания: {{ post.created_at|date:"d-m-Y H:i" }}</p>
+                <h2> Название: {{ post.title }}</h2>
+                <p> Текст: {{ post.preview }}</p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <input class="post_submit_btn" type="submit" value="подтвердить">
+            </form>
+        </div>
+    </div>
+{% endblock %}

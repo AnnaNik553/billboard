@@ -1,0 +1,49 @@
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="login_form">
+        {% if form.errors %}
+            <div role="alert">
+                {{ form.errors|escape }}
+            </div>
+        {% endif %}
+
+        <h3>Создать аккаунт</h3>
+
+        <div class="card-body">
+            <form action="{% url 'users:register' %}" method="post">
+                {% csrf_token %}
+                <label for="first_name">Имя</label>
+                <div>
+                    <input class="input_register" type="text" placeholder="firstname" name="first_name" id="first_name" required>
+                </div>
+                <label for="last_name">Фамилия</label>
+                <div>
+                    <input class="input_register" type="text" placeholder="lastname" name="last_name" id="last_name" required>
+                </div>
+                <label for="username">Имя пользователя</label>
+                <div>
+                    <input class="input_register" type="text" placeholder="username" name="username" id="username" required>
+                </div>
+                <label for="email">Адрес электронной почты</label>
+                <div>
+                    <input class="input_register" type="email" placeholder="email" name="email" id="email" required>
+                </div>
+                <label for="id_password1">Пароль</label>
+                <div>
+                    <input class="input_register" type="password" name="password1" placeholder="password" required id="id_password1">
+                </div>
+                <label for="id_password2">Подтверждение пароля</label>
+                <div>
+                    <input class="input_register" type="password" name="password2" placeholder="password" required id="id_password2">
+                </div>
+                <input class="submit-btn" type="submit" value="Создать аккаунт">
+            </form>
+        </div>
+
+        <div><a class="register-btn" href="{% url 'users:login' %}">Уже есть аккаунт? Авторизоваться</a></div>
+    </div>
+</div>
+{% endblock %}
