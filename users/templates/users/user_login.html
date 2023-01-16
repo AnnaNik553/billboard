@@ -1,32 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-    {% if messages or form.errors %}
+{% extends 'users/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="login_form">
+        {% if messages or form.errors %}
         <div class="alert
-        {% if messages %} alert-success {% else %} alert-warning {% endif %}
-        alert-dismissible fade show" role="alert"
-             style="margin-top: 50px;">
-            {% if messages %}
-                {% for messag in messages %}
-                    {{ messag }}
+            {% if messages %} alert-success {% else %} alert-warning {% endif %}
+            alert-dismissible fade show" role="alert">
+                {% if messages %}
+                    {% for messag in messages %}
+                        {{ messag }}
+                    {% endfor %}
+                {% else %}
+                    {% for error in form.non_field_errors %}
+                    {{ error }}
                 {% endfor %}
-            {% else %}
-                {% for error in form.non_field_errors %}
-                {{ error }}
-            {% endfor %}
-            {% endif %}
+                {% endif %}
+            </div>
+        {% endif %}
+        <form method="POST">
+            {% csrf_token %}
+            <label for="username">Имя пользователя </label>
+            <div>
+                <input class="input" type="text" placeholder="username" name="username" id="username" required>
+            </div>
+            <label for="id_password">Пароль </label>
+            <div>
+                <input class="input" type="password" name="password" placeholder="password" required id="id_password">
+            </div>
+            <input class="submit-btn" type="submit" value="Войти">
+        </form>
+        <div>
+            <a class="register-btn" href="{% url 'users:register' %}">Зарегистрироваться</a>
         </div>
-    {% endif %}
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Войти">
-    </form>
-    <br>
-    <a href="{% url 'users:register' %}">Зарегистрироваться</a>
-</body>
-</html>
+    </div>
+
+</div>
+
+
+{% endblock %}

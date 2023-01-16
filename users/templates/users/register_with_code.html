@@ -2,28 +2,24 @@
 {% load static %}
 
 {% block content %}
-    <div id="layoutAuthentication">
-        <div id="layoutAuthentication_content">
-            <main>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-7">
-                            {% if messages %}
-                                {% for message in messages %}
-                                    <p>{{ message }}</p>
-                                {% endfor %}
-                            {% endif %}
+<div class="container">
+    <div class="login_form">
+        {% if messages %}
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        {% endif %}
 
-                                <form method="POST">
-                                    {% csrf_token %}
-                                    {{ form.as_p }}
-                                    <input type="submit" value="Войти">
-                                </form>
+        <form method="POST">
+            {% csrf_token %}
 
-                        </div>
-                    </div>
-                </div>
-            </main>
-        </div>
+            <label for="code">Введите код</label>
+            <div>
+                <input class="input_register_code" type="text" name="code" id="code" required>
+            </div>
+            <input class="register-code-btn" type="submit" value="Войти">
+        </form>
+
     </div>
+</div>
 {% endblock %}

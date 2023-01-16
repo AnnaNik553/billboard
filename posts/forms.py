@@ -1,12 +1,16 @@
 from django.forms import ModelForm
-from .models import Post, Reply
+from .models import Post, Reply, Category
+from django import forms
 
 
 class PostForm(ModelForm):
     """Форма объявления"""
+
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), empty_label=None, widget=forms.widgets.Select(attrs={
+        'class': 'post_category'}))
+
     class Meta:
         model = Post
-        # fields = ['author', 'category', 'title', 'text', 'image']
         fields = ['category', 'title', 'text', 'image']
 
 
